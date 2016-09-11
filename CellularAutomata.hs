@@ -3,7 +3,6 @@ module CellularAutomata
 , renderEvolution
 ) where
 
-import qualified Data.List as List
 import qualified Data.List.Split as List.Split
 import qualified Data.Map as Map
 
@@ -24,4 +23,4 @@ renderState = map renderCell
           | otherwise = ' '
 
 renderEvolution :: [[Int]] -> [Char]
-renderEvolution xs = List.intercalate "\n" $ map renderState xs
+renderEvolution xs = unlines $ map renderState xs
