@@ -1,4 +1,7 @@
-module CellularAutomata where
+module CellularAutomata
+(
+evolve
+) where
 
 import qualified Data.List.Split as List.Split
 import qualified Data.Map as Map
