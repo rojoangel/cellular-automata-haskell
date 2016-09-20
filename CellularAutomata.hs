@@ -1,26 +1,30 @@
 module CellularAutomata
-( evolve
+( Cell(..)
+, evolve
 , renderEvolution
 ) where
 
 import qualified Data.List.Split as List.Split
 import qualified Data.Map as Map
 
-extractNeighborhoods :: [Int] -> [[Int]]
-extractNeighborhoods xs = List.Split.divvy 3 1 (0 : xs ++ [0])
+data Cell = Cell Integer deriving (Eq, Ord, Show)
 
-evolveOnce :: Map.Map [Int] Int -> [Int] -> [Int]
+extractNeighborhoods :: [Cell] -> [[Cell]]
+extractNeighborhoods xs = List.Split.divvy 3 1 (Cell 0 : xs ++ [Cell 0])
+
+evolveOnce :: Map.Map [Cell] Cell -> [Cell] -> [Cell]
 evolveOnce rule state = map applyRuleToNeighborhood $ extractNeighborhoods state
   where applyRuleToNeighborhood x = case Map.lookup x rule of Just y -> y
 
-evolve :: Map.Map [Int] Int -> [Int] -> Int -> [[Int]]
+evolve :: Map.Map [Cell] Cell -> [Cell] -> Int -> [[Cell]]
 evolve rule state steps = take (succ steps) $ iterate (evolveOnce rule) state
 
-renderState :: [Int] -> [Char]
-renderState = map renderCell
-  where renderCell x
-          | x == 1    = 'x'
-          | otherwise = ' '
+renderCell :: Cell -> Char
+renderCell (Cell 1) = 'x'
+renderCell (Cell 0) = ' '
 
-renderEvolution :: [[Int]] -> [Char]
+renderState :: [Cell] -> [Char]
+renderState = map renderCell
+
+renderEvolution :: [[Cell]] -> [Char]
 renderEvolution xs = unlines $ map renderState xs
